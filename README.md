@@ -4,4 +4,8 @@
 
 #There are three endpoints to save tweet, get tweets and get hashtags
 
+#The application is connected to h2 database
+
 #Third endpoint will retreive top 10 hashtags
+
+
