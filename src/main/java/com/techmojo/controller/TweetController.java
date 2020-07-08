@@ -28,57 +28,64 @@ import lombok.extern.log4j.Log4j2;
 @CrossOrigin
 @Log4j2
 public class TweetController {
-	
+
 	@Autowired
 	private ITweetService iTweetService;
 
-	@ApiOperation(value="Save tweet")
-	@ApiResponses(value= {@ApiResponse(code=201,message="Tweet saved")})
+	@ApiOperation(value = "Save tweet")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Tweet saved") })
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@PostMapping
 	public void saveTweet(@RequestBody TweetRequest tweetRequest) {
-		
+
 		log.info("Persisting the tweet");
-		
-		iTweetService.saveTweet(tweetRequest);		
-		
+
+		iTweetService.saveTweet(tweetRequest);
+
 		log.info("Tweet persisted");
-		
+
 	}
-	
-	@ApiOperation(value="Get Tweets")
-	@ApiResponses(value= {@ApiResponse(code=200,message="Tweets Retrieved",response = TweetResponse.class, responseContainer = "List"),
-			@ApiResponse(code=204,message="No Content")})
+
+	@ApiOperation(value = "Get Tweets")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Tweets Retrieved", response = TweetResponse.class, responseContainer = "List"),
+			@ApiResponse(code = 204, message = "No Content") })
 	@GetMapping
-	public ResponseEntity<?> getTweets(){
-		
+	public ResponseEntity<?> getTweets() {
+
 		log.info("Retrieving tweets");
-		
+
 		List<TweetResponse> tweets = iTweetService.getTweets();
 		Optional<List<TweetResponse>> optionalTweetList = Optional.ofNullable(tweets);
-		
-		if(optionalTweetList.isPresent() && optionalTweetList.get().isEmpty()) {
-			
+
+		if (optionalTweetList.isPresent() && optionalTweetList.get().isEmpty()) {
+
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		
+
 		log.info("Retrieved tweets");
-	
+
 		return new ResponseEntity<>(tweets, HttpStatus.OK);
 	}
-	
-	@ApiOperation(value="Get Hashtags")
-	@ApiResponses(value= {@ApiResponse(code=200,message="Hashtags Retrieved",response = String.class, responseContainer = "List"),
-			@ApiResponse(code=204,message="No Content")})
+
+	@ApiOperation(value = "Get Hashtags")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Hashtags Retrieved", response = String.class, responseContainer = "List"),
+			@ApiResponse(code = 204, message = "No Content") })
 	@GetMapping("hashtags")
-	public ResponseEntity<?> getHashTags(){
-		
+	public ResponseEntity<?> getHashTags() {
+
 		log.info("Retrieving hashtags");
-		
+
 		List<String> hashTags = iTweetService.getHashTags();
-		
+		Optional<List<String>> optionalHashtagList = Optional.ofNullable(hashTags);
+		if (optionalHashtagList.isPresent() && optionalHashtagList.get().isEmpty()) {
+
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+
 		log.info("Retrieved hashtags");
-		
+
 		return new ResponseEntity<>(hashTags, HttpStatus.OK);
 	}
 }
